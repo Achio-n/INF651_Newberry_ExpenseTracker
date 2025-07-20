@@ -1,0 +1,130 @@
+  :root {
+      --green: #2ecc71;
+      --gray: #f2f2f2;
+      --dark-gray: #ccc;
+      --white: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      display: grid;
+      grid-template-areas:
+        "header header header"
+        "left content right"
+        "footer footer footer";
+      grid-template-columns: 60px 1fr 60px;
+      grid-template-rows: auto 1fr auto;
+      height: 100vh;
+      background-color: var(--gray);
+    }
+
+    header, footer {
+      background-color: var(--green);
+      color: var(--white);
+      padding: 1rem;
+      text-align: center;
+    }
+
+    header {
+      grid-area: header;
+    }
+
+    footer {
+      grid-area: footer;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .sidebar {
+      background-color: var(--dark-gray);
+      padding: 1rem 0;
+    }
+
+    .left {
+      grid-area: left;
+    }
+
+    .right {
+      grid-area: right;
+    }
+
+    main {
+      grid-area: content;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 1rem;
+      justify-content: center;
+      align-items: start;
+    }
+
+   .panel {
+  background-color: var(--white);
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  width: 44%;
+  min-height: 200px;
+  resize: both;
+  overflow: auto;
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+  cursor: grab;
+  text-align: center;
+   max-height: 300px; /* adjust as needed */
+  overflow-y: auto;
+  font-size: 0.9rem; 
+}
+.panel button {
+  padding: 0.25rem 0.5rem; /* Smaller padding */
+  font-size: 0.75rem; /* Smaller font */
+}
+
+    .panel:active {
+      cursor: grabbing;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        grid-template-columns: 0 1fr 0;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      main {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .panel {
+        width: 100%;
+      }
+    }
+
+    nav a {
+  transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+nav a:hover {
+  color: #d4f7e2;
+  text-decoration: underline;
+}
+
+header {
+  background: linear-gradient(90deg, #27ae60, #2ecc71);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+

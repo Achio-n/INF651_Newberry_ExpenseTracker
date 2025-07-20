@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expense Tracker</title>
+ 
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+ <link rel="stylesheet" type="text/css" href="css/main.css">
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+
+<body>
+ <header class="bg-success text-white py-3 shadow-sm">
+  <div class="container d-flex justify-content-between align-items-center flex-wrap">
+    <h1 class="mb-0 d-flex align-items-center">
+      <i class="bi bi-wallet2 me-2"></i> Expense Tracker
+    </h1>
+<div class="d-flex align-items-center gap-3">
+  <nav class="d-flex gap-3">
+    <a href="#" class="nav-link text-white">Home</a>
+    <a href="#" class="nav-link text-white">Reports</a>
+    <a href="#" class="nav-link text-white">Settings</a>
+  </nav>
+  <i class="bi bi-person-circle fs-4"></i>
+</div>
+
+  </div>
+</header>
+
+
+  <aside class="sidebar left"></aside>
+  <aside class="sidebar right"></aside>
+
+  <main>
+
+    <!-- Month, Year Selection-->
+
+<div class="container my-3 d-flex justify-content-center align-items-center gap-3">
+  <label for="month-select" class="form-label mb-0">Month:</label>
+  <select id="month-select" class="form-select w-auto">
+    <!-- Months options inserted dynamically -->
+  </select>
+
+  <label for="year-select" class="form-label mb-0">Year:</label>
+  <select id="year-select" class="form-select w-auto">
+    <!-- Year options inserted dynamically -->
+  </select>
+</div>
+<!--populate the data selections-->
+
+<script>
+  const monthSelect = document.getElementById('month-select');
+  const yearSelect = document.getElementById('year-select');
+
+  function populateMonthYearSelectors() {
+    const months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    // Populate months
+    months.forEach((m, i) => {
+      const option = document.createElement('option');
+      option.value = i + 1; // month number 1-12
+      option.textContent = m;
+      monthSelect.appendChild(option);
+    });
+
+    // Populate years (current year ±5)
+    const currentYear = new Date().getFullYear();
+    for (let y = currentYear - 5; y <= currentYear + 5; y++) {
+      const option = document.createElement('option');
+      option.value = y;
+      option.textContent = y;
+      yearSelect.appendChild(option);
+    }
+
+    // Select current month and year by default
+    monthSelect.value = new Date().getMonth() + 1;
+    yearSelect.value = currentYear;
+  }
+
+  populateMonthYearSelectors();
+</script>
+
+      <!--Income Area-->
+      <div class="panel shadow-sm p-3 bg-white rounded" draggable="true" id="income-panel">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0">💰 Income Summary</h5>
+    <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addIncomeModal">Add Income</button>
+  </div>
+
+  <table class="table table-bordered table-sm">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Source</th>
+        <th>Amount</th>
+        <th class="text-end">Actions</th>
+      </tr>
+    </thead>
+    <tbody id="income-table-body"></tbody>
+  </table>
+</div>
+
+<!-- Modal for Adding Income -->
+<div class="modal fade" id="addIncomeModal" tabindex="-1" aria-labelledby="addIncomeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="income-form">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addIncomeModalLabel">Add Income</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="income-date" class="form-label">Date</label>
+            <input type="date" class="form-control" id="income-date" required>
+          </div>
+          <div class="mb-3">
+            <label for="income-source" class="form-label">Source</label>
+            <input type="text" class="form-control" id="income-source" required>
+          </div>
+          <div class="mb-3">
+            <label for="income-amount" class="form-label">Amount</label>
+            <input type="number" step="0.01" class="form-control" id="income-amount" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Add</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+      <!--End Income Area-->
+
+        <!--Expense Area-->
+      <div class="panel shadow-sm p-3 bg-white rounded" draggable="true" id="expenses-panel">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0">💸 Expense Summary</h5>
+    <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addExpenseModal">Add Expense</button>
+  </div>
+
+  <table class="table table-bordered table-sm">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Category</th>
+        <th>Amount</th>
+        <th class="text-end">Actions</th>
+      </tr>
+    </thead>
+    <tbody id="expenses-table-body"></tbody>
+  </table>
+</div>
+
+<!-- Modal for Adding Expense -->
+<div class="modal fade" id="addExpenseModal" tabindex="-1" aria-labelledby="addExpenseModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="expense-form">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addExpenseModalLabel">Add Expense</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="expense-date" class="form-label">Date</label>
+            <input type="date" class="form-control" id="expense-date" required>
+          </div>
+          <div class="mb-3">
+            <label for="expense-category" class="form-label">Category</label>
+            <select id="expense-category" class="form-select" required>
+  <!-- options will be added dynamically -->
+</select>
+          </div>
+          <div class="mb-3">
+            <label for="expense-amount" class="form-label">Amount</label>
+            <input type="number" step="0.01" class="form-control" id="expense-amount" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Add</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+ <!--End Expense Area-->
+  <!--Spending by Category Area-->
+      <div class="panel" draggable="true">📊 Spending by Category</div>
+      
+ <!--Budget Area-->
+<div class="panel shadow-sm p-3 bg-white rounded" draggable="true" id="budget-panel">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0">📊 Budget</h5>
+    <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addBudgetModal">Add Budget Item</button>
+  </div>
+
+  <table class="table table-bordered table-sm">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Category</th>
+        <th>Amount</th>
+        <th class="text-end">Actions</th>
+      </tr>
+    </thead>
+    <tbody id="budget-table-body"></tbody>
+  </table>
+</div>
+
+<!-- Modal for Adding Budget Item -->
+<div class="modal fade" id="addBudgetModal" tabindex="-1" aria-labelledby="addBudgetModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="budget-form">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addBudgetModalLabel">Add Budget Item</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="budget-date" class="form-label">Date</label>
+            <input type="date" class="form-control" id="budget-date" required>
+          </div>
+          <div class="mb-3">
+            <label for="budget-category" class="form-label">Category</label>
+            <input type="text" class="form-control" id="budget-category" required>
+          </div>
+          <div class="mb-3">
+            <label for="budget-amount" class="form-label">Amount</label>
+            <input type="number" step="0.01" class="form-control" id="budget-amount" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Add</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+  <!--Overview/Summary Area-->
+      <div class="panel" draggable="true">🧾 OverView/Summary 📊</div>
+
+
+       <!--Overview/Summary Area-->
+  </main>
+
+ <footer class="bg-success text-white text-center py-3">
+  <nav class="d-flex justify-content-center gap-3">
+    <a href="#" class="nav-link text-white">Privacy</a>
+    <a href="#" class="nav-link text-white">Terms</a>
+    <a href="#" class="nav-link text-white">Contact</a>
+  </nav>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+<script src="js/categories.js"></script>
+ <script src="js/dnd.js"></script>
+ <script src="js/income.js"></script>
+ <script src="js/income.js"></script>
+<script src="js/expenses.js"></script>
+<script src="js/budget.js"></script>
+
+
+</html>
