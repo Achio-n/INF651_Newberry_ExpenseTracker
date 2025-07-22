@@ -2,7 +2,25 @@ document.addEventListener('DOMContentLoaded', () => {
   const incomeForm = document.getElementById('income-form');
   const incomeTableBody = document.getElementById('income-table-body');
 
+  function resetPage(){//once total are changed, reload the page to show new $
+    sessionStorage.setItem("refreshOverview", "true");//reload the page to see changes
+    window.location.href = "index.html"; // redirect back to dashboard
+  }
+
   loadIncome();
+  updateIncomeSummary();
+
+  document.getElementById('month-select').addEventListener('change', () => {
+  loadIncome();
+  updateIncomeSummary();
+});
+
+document.getElementById('year-select').addEventListener('change', () => {
+  loadIncome();
+  updateIncomeSummary();
+});
+
+
 
   incomeForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -17,19 +35,36 @@ document.addEventListener('DOMContentLoaded', () => {
     incomeForm.reset();
     bootstrap.Modal.getInstance(document.getElementById('addIncomeModal')).hide();
     loadIncome();
+    updateIncomeSummary();
+    sessionStorage.setItem("refreshOverview", "true");//reload the page to see changes
+    window.location.href = "index.html"; // redirect back to dashboard
   });
 
   function saveIncomeEntry(entry) {
     const data = JSON.parse(localStorage.getItem("incomeData")) || [];
     data.push(entry);
     localStorage.setItem("incomeData", JSON.stringify(data));
+    resetPage();
   }
 
   function loadIncome() {
-    incomeTableBody.innerHTML = "";
-    const data = JSON.parse(localStorage.getItem("incomeData")) || [];
-    data.forEach(entry => addRowToTable(entry));
-  }
+  incomeTableBody.innerHTML = "";
+
+  const selectedMonth = parseInt(document.getElementById('month-select').value);
+  const selectedYear = parseInt(document.getElementById('year-select').value);
+  const data = JSON.parse(localStorage.getItem("incomeData")) || [];
+
+  const filtered = data.filter(entry => {
+    const date = new Date(entry.date);
+    return (
+      date.getMonth() === selectedMonth &&
+      date.getFullYear() === selectedYear
+    );
+  });
+
+  filtered.forEach(entry => addRowToTable(entry));
+}
+
 
   function addRowToTable(entry) {
     const row = document.createElement('tr');
@@ -50,9 +85,32 @@ document.addEventListener('DOMContentLoaded', () => {
     data = data.filter(entry => entry.id !== id);
     localStorage.setItem("incomeData", JSON.stringify(data));
     loadIncome();
+    resetPage();
   };
 
   window.editIncome = (id) => {
     alert('Edit functionality coming soon!'); // You can implement modal editing here later
   };
 });
+
+function updateIncomeSummary() {
+  const selectedMonth = parseInt(document.getElementById('month-select').value);
+  const selectedYear = parseInt(document.getElementById('year-select').value);
+  const data = JSON.parse(localStorage.getItem("incomeData")) || [];
+
+  const filtered = data.filter(entry => {
+    const date = new Date(entry.date);
+    return (
+      date.getMonth() === selectedMonth &&
+      date.getFullYear() === selectedYear
+    );
+  });
+
+  const total = filtered.reduce((sum, entry) => sum + parseFloat(entry.amount), 0);
+
+  const summaryElement = document.getElementById('incomeTotal');
+  if (summaryElement) {
+    summaryElement.textContent = `$${total.toFixed(2)}`;
+  }
+}
+ renderOverview();

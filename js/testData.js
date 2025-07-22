@@ -82,7 +82,7 @@ function generateDummyExpenseData() {
   const data = [];
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
-  const currentMonth = currentDate.getMonth() + 1;
+  const currentMonth = currentDate.getMonth();
 
   for (let i = 0; i < 24; i++) {
     let month = currentMonth - i;
@@ -125,18 +125,18 @@ function clearAllData() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const contactLink = document.getElementById('contact-link');
-  const termsLink = document.getElementById('terms-link');
+  const loadData = document.getElementById('loadData');
+  const clearData = document.getElementById('clearData');
 
-  if (contactLink) {
-    contactLink.addEventListener('click', e => {
+  if (loadData) {
+    loadData.addEventListener('click', e => {
       e.preventDefault();
       loadDummyData();
     });
   }
 
-  if (termsLink) {
-    termsLink.addEventListener('click', e => {
+  if (clearData) {
+    clearData.addEventListener('click', e => {
       e.preventDefault();
       clearAllData();
     });

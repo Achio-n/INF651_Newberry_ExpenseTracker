@@ -1,8 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
   const expenseForm = document.getElementById('expense-form');
   const expenseTableBody = document.getElementById('expenses-table-body');
+  
+  function resetPage(){//once total are changed, reload the page to show new $
+    sessionStorage.setItem("refreshOverview", "true");//reload the page to see changes
+    window.location.href = "index.html"; // redirect back to dashboard
+  }
 
   loadExpenses();
+  updateExpenseSummary()
+  document.getElementById('month-select').addEventListener('change', () => {
+  loadExpenses();
+  updateExpenseSummary();
+});
+
+document.getElementById('year-select').addEventListener('change', () => {
+  loadExpenses();
+  updateExpenseSummary();
+});
 
   expenseForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -17,19 +32,36 @@ document.addEventListener('DOMContentLoaded', () => {
     expenseForm.reset();
     bootstrap.Modal.getInstance(document.getElementById('addExpenseModal')).hide();
     loadExpenses();
+    updateExpenseSummary();
   });
 
   function saveExpenseEntry(entry) {
     const data = JSON.parse(localStorage.getItem("expenseData")) || [];
     data.push(entry);
     localStorage.setItem("expenseData", JSON.stringify(data));
+    resetPage();
   }
 
-  function loadExpenses() {
-    expenseTableBody.innerHTML = "";
-    const data = JSON.parse(localStorage.getItem("expenseData")) || [];
-    data.forEach(entry => addRowToTable(entry));
-  }
+ function loadExpenses() {
+  const expenseTableBody = document.getElementById('expenses-table-body');
+  expenseTableBody.innerHTML = "";
+
+  const selectedMonth = parseInt(document.getElementById('month-select').value);
+  const selectedYear = parseInt(document.getElementById('year-select').value);
+  const data = JSON.parse(localStorage.getItem("expenseData")) || [];
+
+  const filtered = data.filter(entry => {
+    const date = new Date(entry.date);
+    return (
+      date.getMonth() === selectedMonth &&
+      date.getFullYear() === selectedYear
+    );
+  });
+
+  filtered.forEach(entry => addRowToTable(entry));
+
+}
+
 
   function addRowToTable(entry) {
     const row = document.createElement('tr');
@@ -50,9 +82,31 @@ document.addEventListener('DOMContentLoaded', () => {
     data = data.filter(entry => entry.id !== id);
     localStorage.setItem("expenseData", JSON.stringify(data));
     loadExpenses();
+    resetPage();
   };
 
   window.editExpense = (id) => {
     alert('Edit functionality coming soon!');
   };
 });
+
+function updateExpenseSummary() {
+  const selectedMonth = parseInt(document.getElementById('month-select').value);
+  const selectedYear = parseInt(document.getElementById('year-select').value);
+  const data = JSON.parse(localStorage.getItem("expenseData")) || [];
+
+  const filtered = data.filter(entry => {
+    const date = new Date(entry.date);
+    return (
+      date.getMonth() === selectedMonth &&
+      date.getFullYear() === selectedYear
+    );
+  });
+
+  const total = filtered.reduce((sum, entry) => sum + parseFloat(entry.amount), 0);
+
+  const summaryElement = document.getElementById('expenseTotal');
+  if (summaryElement) {
+    summaryElement.textContent = `$${total.toFixed(2)}`;
+  }
+}

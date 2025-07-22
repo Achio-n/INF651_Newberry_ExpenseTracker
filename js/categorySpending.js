@@ -1,4 +1,5 @@
 // categorySpending.js
+updateSpendingByCategory();
 
 // Function to get total spending by category for the given month and year
 function getSpendingByCategory(month, year) {
@@ -7,9 +8,13 @@ function getSpendingByCategory(month, year) {
   // Filter expenses by month and year
 const filtered = expenses.filter((expense) => {
   const [expYear, expMonth] = expense.date.split("-").map(Number);
-  return expYear === year && expMonth === month;
+  return expYear === year && expMonth === (month + 1);
 });
-
+console.log(`Filtering for year: ${year}, month: ${month}`);
+console.log("Filtered expenses:", filtered);
+const today = new Date();
+const currentMonth = today.getMonth(); // 0 = Jan
+const currentYear = today.getFullYear();
 
   // Sum amounts per category
   const spending = {};
@@ -19,6 +24,7 @@ const filtered = expenses.filter((expense) => {
   });
 
   return spending; // { categoryName: totalAmount, ... }
+  
 }
 
 // Function to display spending breakdown in the "Spending by Category" panel
@@ -71,7 +77,7 @@ function displaySpendingByCategory(spending) {
     sortedSpending.forEach(([category, amount]) => {
       const row = document.createElement("tr");
       row.innerHTML = `
-        <td>${category}</td>
+        <td class="text-start">${category}</td>
         <td class="text-end">$${amount.toFixed(2)}</td>
       `;
       tbody.appendChild(row);
@@ -84,9 +90,8 @@ function displaySpendingByCategory(spending) {
 
 // Called on page load and on change of month/year dropdowns
 function updateSpendingByCategory() {
-const selectedMonth = parseInt(document.getElementById("month-select").value);
-const selectedYear = parseInt(document.getElementById("year-select").value);
-
+  const monthSelect = document.getElementById("month-select");
+  const yearSelect = document.getElementById("year-select");
 
   if (!monthSelect || !yearSelect) {
     console.warn("Month or Year select elements not found.");
@@ -99,6 +104,7 @@ const selectedYear = parseInt(document.getElementById("year-select").value);
   const spending = getSpendingByCategory(month, year);
   displaySpendingByCategory(spending);
 }
+
 
 // Hook into DOMContentLoaded and dropdown change events
 document.addEventListener("DOMContentLoaded", () => {
