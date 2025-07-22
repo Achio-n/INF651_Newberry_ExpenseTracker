@@ -1,3 +1,4 @@
+//listen for page to be reloaded and then reload data.
 document.addEventListener('DOMContentLoaded', () => {
   const incomeForm = document.getElementById('income-form');
   const incomeTableBody = document.getElementById('income-table-body');
@@ -21,7 +22,7 @@ document.getElementById('year-select').addEventListener('change', () => {
 });
 
 
-
+  //listen for modal submmission and then reload the page again to show new data
   incomeForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const entry = {
@@ -89,7 +90,7 @@ document.getElementById('year-select').addEventListener('change', () => {
   };
 
   window.editIncome = (id) => {
-    alert('Edit functionality coming soon!'); // You can implement modal editing here later
+    alert('Edit functionality coming soon!'); //implement modal editing here later
   };
 });
 
@@ -113,4 +114,4 @@ function updateIncomeSummary() {
     summaryElement.textContent = `$${total.toFixed(2)}`;
   }
 }
- renderOverview();
+ //renderOverview();

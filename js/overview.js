@@ -1,5 +1,7 @@
 // overview.js
-
+//Bottom panel to show income, budget, net expenses, and net balance for month and
+//year selected.
+//Expand this panel and grow into a full report page in the future.
 function getMonthName(monthNumber) {
 
   const months = [
@@ -56,7 +58,7 @@ function updateOverviewSummary() {
 
   const balance = totalIncome - totalExpenses ;
 
-  // Determine color based on balance
+  // Determine color based on balance amount
   let colorClass = '';
   if (balance > 0) {
     colorClass = 'text-success';  // green
@@ -69,9 +71,13 @@ function updateOverviewSummary() {
   const monthName = getMonthName(selectedMonth);
   summaryElement.className = `fs-5`;
   let net = totalBudget - totalExpenses;
-summaryElement.innerHTML = `
+  //formatting
+  
+  
+  //ouput the output already
+  summaryElement.innerHTML = `
   <div class="mb-2 fw-bold">Summary for <strong>${monthName} ${selectedYear}</strong></div>
-  <div > Income: $${totalIncome.toFixed(2)}'</span></div>  
+  <div > Income: $${totalIncome.toFixed(2)}</span></div>  
   <hr>
   <div class="text-end">Expense Budget: $${totalBudget.toFixed(2)}</div> 
   <div class="text-end">Expenses: $${totalExpenses.toFixed(2)}</div>
@@ -90,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   if (sessionStorage.getItem("refreshOverview") === "true") {
-    renderOverview(); 
+    //renderOverview(); 
     sessionStorage.removeItem("refreshOverview");
   }
 });

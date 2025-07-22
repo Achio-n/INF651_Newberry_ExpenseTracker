@@ -1,4 +1,5 @@
 // categorySpending.js
+//summary and list of spending by category for selected month.
 updateSpendingByCategory();
 
 // Function to get total spending by category for the given month and year

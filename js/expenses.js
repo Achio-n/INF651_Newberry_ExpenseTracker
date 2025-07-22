@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     sessionStorage.setItem("refreshOverview", "true");//reload the page to see changes
     window.location.href = "index.html"; // redirect back to dashboard
   }
-
+  //load expenses and summary. Listen for a month or year to be changed and then update again.
   loadExpenses();
   updateExpenseSummary()
   document.getElementById('month-select').addEventListener('change', () => {
@@ -18,7 +18,7 @@ document.getElementById('year-select').addEventListener('change', () => {
   loadExpenses();
   updateExpenseSummary();
 });
-
+//listen for a submit and then reload data again to show new values instantly.
   expenseForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const entry = {
@@ -34,14 +34,14 @@ document.getElementById('year-select').addEventListener('change', () => {
     loadExpenses();
     updateExpenseSummary();
   });
-
+//save new expense entry and reload the page. 
   function saveExpenseEntry(entry) {
     const data = JSON.parse(localStorage.getItem("expenseData")) || [];
     data.push(entry);
     localStorage.setItem("expenseData", JSON.stringify(data));
     resetPage();
   }
-
+//load expenses by pulling the expense data and filtering by month and year
  function loadExpenses() {
   const expenseTableBody = document.getElementById('expenses-table-body');
   expenseTableBody.innerHTML = "";
@@ -62,7 +62,7 @@ document.getElementById('year-select').addEventListener('change', () => {
 
 }
 
-
+  //load each row of data once it has been filtered. added edit and delete but only delete is set up.
   function addRowToTable(entry) {
     const row = document.createElement('tr');
     row.innerHTML = `
@@ -76,7 +76,7 @@ document.getElementById('year-select').addEventListener('change', () => {
     `;
     expenseTableBody.appendChild(row);
   }
-
+//when deleting, reload data and page.
   window.deleteExpense = (id) => {
     let data = JSON.parse(localStorage.getItem("expenseData")) || [];
     data = data.filter(entry => entry.id !== id);
@@ -84,12 +84,12 @@ document.getElementById('year-select').addEventListener('change', () => {
     loadExpenses();
     resetPage();
   };
-
+//remove when edit feature is complete. 
   window.editExpense = (id) => {
     alert('Edit functionality coming soon!');
   };
 });
-
+//update expenses total.
 function updateExpenseSummary() {
   const selectedMonth = parseInt(document.getElementById('month-select').value);
   const selectedYear = parseInt(document.getElementById('year-select').value);

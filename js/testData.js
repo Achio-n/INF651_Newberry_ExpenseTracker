@@ -1,3 +1,4 @@
+//load a bunch of test data so it is easier and faster to validate numbers.
 const incomeSources = [
   "Salary",
   "Freelance",
@@ -25,7 +26,7 @@ function generateDummyBudgetData() {
   const data = [];
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
-  const currentMonth = currentDate.getMonth() + 1; // 1-based
+  const currentMonth = currentDate.getMonth() + 1; 
 
   for (let i = 0; i < 24; i++) {
     // Calculate year and month going backward
@@ -77,7 +78,7 @@ function generateDummyIncomeData() {
   localStorage.setItem('incomeData', JSON.stringify(data));
   return data.length;
 }
-
+//pull it all together and save the data to localStorage
 function generateDummyExpenseData() {
   const data = [];
   const currentDate = new Date();

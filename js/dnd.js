@@ -1,7 +1,10 @@
 
+    //drag and drop feature.
+    //get all the panels
     const panels = document.querySelectorAll('.panel');
     let draggedPanel = null;
 
+    //adjust styles on the go
     panels.forEach(panel => {
       panel.addEventListener('dragstart', (e) => {
         draggedPanel = panel;

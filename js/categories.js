@@ -1,4 +1,6 @@
 
+//array of categories. This could also be stored in localstorage. An upgrade would be to allow user to add or delete categories. Have I mentioned I miss working with databases?
+//This page simply builds the list of categories in to a select list for budget and expenses modals
 window.categories = [
   "Mortgage",
   "Rent",

@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = "index.html"; // redirect back to dashboard
   }
   
+  //if year or month is changed, reload the data
   document.getElementById('month-select').addEventListener('change', () => {
     loadBudget();
     updateBudgetSummary();
@@ -17,13 +18,13 @@ document.addEventListener('DOMContentLoaded', () => {
     updateBudgetSummary();
   });
 
-// On initial load
+
 loadBudget();
 updateBudgetSummary();
 
 
 budgetForm.addEventListener('submit', (e) => {
-  e.preventDefault();
+e.preventDefault();
 const budgetMonth = parseInt(document.getElementById('month-select').value);
 const budgetYear = document.getElementById('year-select').value;
 
@@ -34,25 +35,25 @@ const budgetYear = document.getElementById('year-select').value;
   date: `${budgetYear}-${String(budgetMonth + 1).padStart(2, '0')}-01`, // FIXED: Added day and corrected month
   category: document.getElementById('budgetCategory').value,
   amount: parseFloat(document.getElementById('budgetAmount').value)
-};
+  };
 
 
 
   saveBudgetEntry(entry);
   budgetForm.reset();
-  // Fix modal id here
+
   bootstrap.Modal.getInstance(document.getElementById('budgetModal')).hide();
   loadBudget();
   updateBudgetSummary();
 });
-
+  //save new entry and reload the page so panels have updated data
   function saveBudgetEntry(entry) {
     const data = JSON.parse(localStorage.getItem("budgetData")) || [];
     data.push(entry);
     localStorage.setItem("budgetData", JSON.stringify(data));
     resetPage();
   }
-
+  //build dataset for budget
   function loadBudget() {
     const budgetTableBody = document.getElementById('budget-table-body');
     budgetTableBody.innerHTML = "";
@@ -75,7 +76,7 @@ const budgetYear = document.getElementById('year-select').value;
   filtered.forEach(entry => addBudgetRowToTable(entry));
 }
 
-
+  //write the data to the output panel
   function addBudgetRowToTable(entry) {
   const budgetTableBody = document.getElementById('budget-table-body');
   const row = document.createElement('tr');
@@ -104,7 +105,7 @@ const budgetYear = document.getElementById('year-select').value;
     alert('Edit functionality coming soon!');
   };
 });
-
+//update summary total in h5 div
 function updateBudgetSummary() {
   const selectedMonth = parseInt(document.getElementById('month-select').value) -1;
   const selectedYear = parseInt(document.getElementById('year-select').value);
